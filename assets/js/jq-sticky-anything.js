@@ -1,5 +1,5 @@
 /**
-* @preserve Sticky Anything 1.1.1 | @senff | GPL2 Licensed
+* @preserve Sticky Anything 1.1.2 | @senff | GPL2 Licensed
 */
 
 (function ($) {
@@ -61,7 +61,7 @@ function stickIt(stickyTop,minwidth,maxwidth) {
     orgElement = $('.original');
     coordsOrgElement = orgElement.offset();
     leftOrgElement = coordsOrgElement.left;  
-    widthOrgElement = orgElement.width();
+    widthOrgElement = orgElement.outerWidth();
 
     $('.cloned').css('left',leftOrgElement+'px').css('top',stickyTop+'px').css('width',widthOrgElement+'px').show();
     $('.original').css('visibility','hidden');
