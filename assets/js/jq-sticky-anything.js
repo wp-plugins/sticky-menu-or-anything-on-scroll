@@ -1,5 +1,5 @@
 /**
-* @preserve Sticky Anything 1.1 | @senff | GPL2 Licensed
+* @preserve Sticky Anything 1.1.1 | @senff | GPL2 Licensed
 */
 
 (function ($) {
@@ -45,7 +45,15 @@ function stickIt(stickyTop,minwidth,maxwidth) {
   var orgElementPos = $('.original').offset();
   orgElementTop = orgElementPos.top;               
 
-  if (($(window).scrollTop() >= (orgElementTop - stickyTop)) && ($(window).width() > minwidth) && ($(window).width() < maxwidth)) {
+  // Calculating actual viewport width
+  var e = window, a = 'inner';
+  if (!('innerWidth' in window )) {
+    a = 'client';
+    e = document.documentElement || document.body;
+  }
+  viewport = e[ a+'Width' ];
+
+  if (($(window).scrollTop() >= (orgElementTop - stickyTop)) && (viewport >= minwidth) && (viewport <= maxwidth)) {
 
     // scrolled past the original position; now only show the cloned, sticky element.
 

@@ -4,7 +4,7 @@
 * Plugin URI: http://www.senff.com/plugins/sticky-anything-wp
 * Requires at least: 3.6
 * Tested up to: 4.0
-* Stable tag: 1.1
+* Stable tag: 1.1.1
 * License: GPLv2 or later
 * License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -59,6 +59,9 @@ For any other issues, please use the [WordPress.org forum](https://wordpress.org
 
 ## Changelog
 
+### 1.1.1
+* Fixes viewport calculation bug
+
 ### 1.1
 * Added functionality for optional minimum/maximum screen size
 
@@ -67,6 +70,9 @@ For any other issues, please use the [WordPress.org forum](https://wordpress.org
 
 
 ## Upgrade Notice 
+
+### 1.1.1
+Fixes viewport calculation bug.
 
 ### 1.1
 Added functionality: you can now set a minimum and/or maximum screen size where the element should be sticky (handy for responsive designs, should you not want your element to be sticky below or above certain screen sizes).
