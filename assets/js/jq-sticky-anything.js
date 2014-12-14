@@ -1,5 +1,5 @@
 /**
-* @preserve Sticky Anything 1.1.3 | @senff | GPL2 Licensed
+* @preserve Sticky Anything 1.2 | @senff | GPL2 Licensed
 */
 
 (function ($) {
@@ -32,15 +32,16 @@
       }      
     } else {
       // Create a clone of the menu, right next to original (in the DOM).
-      $(this).addClass('original').clone().insertAfter(this).addClass('cloned').css('position','fixed').css('top',settings.top+'px').css('margin-top','0').css('margin-left','0').css('z-index',settings.zindex).removeClass('original').hide();
-      checkElement = setInterval(function(){stickIt(settings.top,settings.minscreenwidth,settings.maxscreenwidth)},10);
+      // OLD: $(this).addClass('original').clone().insertAfter(this).addClass('cloned').css('position','fixed').css('top',settings.top+'px').css('margin-top','0').css('margin-left','0').css('z-index',settings.zindex).removeClass('original').hide();
+      $(this).addClass('original');
+      checkElement = setInterval(function(){stickIt(settings.top,settings.minscreenwidth,settings.maxscreenwidth,settings.zindex)},10);
     }
 
     return this;
   };
 
 
-function stickIt(stickyTop,minwidth,maxwidth) {
+function stickIt(stickyTop,minwidth,maxwidth,stickyzindex) {
 
   var orgElementPos = $('.original').offset();
   orgElementTop = orgElementPos.top;               
@@ -55,7 +56,7 @@ function stickIt(stickyTop,minwidth,maxwidth) {
 
   if (($(window).scrollTop() >= (orgElementTop - stickyTop)) && (viewport >= minwidth) && (viewport <= maxwidth)) {
 
-    // scrolled past the original position; now only show the cloned, sticky element.
+    // We've scrolled past the original position; now only show the cloned, sticky element.
 
     // Cloned element should always have same left position and width as original element.     
     orgElement = $('.original');
@@ -63,11 +64,16 @@ function stickIt(stickyTop,minwidth,maxwidth) {
     leftOrgElement = coordsOrgElement.left;  
     widthOrgElement = orgElement.css('width');
 
+    if($('.cloned').length < 1) {
+      // The cloned element does not exist yet, so let's create it on the fly
+      $('.original').clone().insertAfter('.original').addClass('cloned').css('position','fixed').css('top',stickyTop+'px').css('margin-top','0').css('margin-left','0').css('z-index',stickyzindex).removeClass('original').hide();
+    }
+
     $('.cloned').css('left',leftOrgElement+'px').css('top',stickyTop+'px').css('width',widthOrgElement).show();
     $('.original').css('visibility','hidden');
   } else {
-    // not scrolled past the menu; only show the original menu.
-    $('.cloned').hide();
+    // Not scrolled past the menu; only show the original menu -- remove the cloned element
+    $('.cloned').remove();
     $('.original').css('visibility','visible');
   }
 }
