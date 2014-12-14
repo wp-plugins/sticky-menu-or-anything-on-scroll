@@ -3,8 +3,8 @@ Contributors: senff
 Tags: plugin, sticky, menu, scroll, element
 Plugin URI: http://www.senff.com/plugins/sticky-anything-wp
 Requires at least: 3.6
-Tested up to: 4.0
-Stable tag: 1.1.3
+Tested up to: 4.1
+Stable tag: 1.1.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -40,6 +40,10 @@ A little bit of basic HTML/CSS knowledge is required. You just need to know how 
 = I selected a class/ID in the settings screen, but the element doesn't stick when I scroll downs. Why not? =
 Make sure that if you select the element by its classname, it is preceded by a dot (e.g. ".main-menu"), and if you select it by its ID, that it's preceded by a pound/hash/number sign (e.g. "#main-menu").  Also, make sure there is only ONE element on the page with the selector you're using. If there is none, or more than one element that matches your selector, nothing will happen.
 
+= I'm having some issues on mobile (or other responsive themes).
+Some themes use some JavaScript to dynamically create elements (menus, mostly) for mobile sites. With this method, a menu doesn't exist in the HTML source code upon page load, but is created on the fly some time after the page is fully loaded. Since the Sticky Anything plugin only works with elements that are present in the HTML source code, this can cause issues.
+There is an experimental version of the plugin that addresses this issue, but it is not public since most themes do not use this method (and other plugins may rely on having the sticky menu present before they load). If you are interested in trying this version, please get in touch with me through http://www.senff.com/ and I will be happy to provide you this version, along with some help.
+
 = Still doesn't work. What could be wrong? =
 Check the "Debug Mode" checkbox in the plugin's settings. Reload the page and you may see errors in your browser's console window. If you've used a selector that returns zero elements on the page, OR more than one, it will be shown.
 
@@ -49,7 +53,7 @@ The current version only allows one sticky element. Having more than one may clu
 = I'll need more help please! = 
 The plugin's own page can be found [here](http://www.senff.com/plugins/sticky-anything-wp).
 
-For any other issues, please use the [WordPress.org forum](https://wordpress.org/support/).
+For any other issues, please use the [WordPress.org forum](https://wordpress.org/support/plugin/sticky-menu-or-anything-on-scroll).
 
 
 == Screenshots ==
@@ -58,6 +62,10 @@ For any other issues, please use the [WordPress.org forum](https://wordpress.org
 
 
 == Changelog ==
+
+= 1.1.4 =
+* Ready for WordPress 4.1 (and TwentyFifteen).
+* Fixes issue when element has padding in percentages.
 
 = 1.1.3 =
 * Fixes width calculation bug introduced in previous version (sorry about that), box sizing now supported.
@@ -77,17 +85,21 @@ For any other issues, please use the [WordPress.org forum](https://wordpress.org
 
 == Upgrade Notice ==
 
+= 1.1.4 =
+* Ready for WordPress 4.1 (and TwentyFifteen).
+* Fixes issue when element has padding in percentages.
+
 = 1.1.3 =
 * Fixes width calculation bug introduced in previous version (sorry about that), box sizing now supported.
 
 = 1.1.2 =
-Fixes element width calculation bug.
+* Fixes element width calculation bug.
 
 = 1.1.1 =
-Fixes viewport calculation bug.
+* Fixes viewport calculation bug.
 
 = 1.1 =
-Added functionality: you can now set a minimum and/or maximum screen size where the element should be sticky (handy for responsive designs, should you not want your element to be sticky below or above certain screen sizes).
+* Added functionality: you can now set a minimum and/or maximum screen size where the element should be sticky (handy for responsive designs, should you not want your element to be sticky below or above certain screen sizes).
 
 = 1.0 =
-Initial release of the plugin.
+* Initial release of the plugin.

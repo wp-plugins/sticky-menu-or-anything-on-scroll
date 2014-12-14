@@ -62,8 +62,11 @@ function stickIt(stickyTop,minwidth,maxwidth) {
     coordsOrgElement = orgElement.offset();
     leftOrgElement = coordsOrgElement.left;  
     widthOrgElement = orgElement.css('width');
+    // If padding is percentages, convert to pixels
+    paddingOrgElement = [orgElement.css('padding-top'), orgElement.css('padding-right'), orgElement.css('padding-bottom'), orgElement.css('padding-left')];
+    paddingCloned = paddingOrgElement[0] + ' ' + paddingOrgElement[1] + ' ' + paddingOrgElement[2] + ' ' + paddingOrgElement[3];
 
-    $('.cloned').css('left',leftOrgElement+'px').css('top',stickyTop+'px').css('width',widthOrgElement).show();
+    $('.cloned').css('left',leftOrgElement+'px').css('top',stickyTop+'px').css('width',widthOrgElement).css('padding',paddingCloned).show();
     $('.original').css('visibility','hidden');
   } else {
     // not scrolled past the menu; only show the original menu.
