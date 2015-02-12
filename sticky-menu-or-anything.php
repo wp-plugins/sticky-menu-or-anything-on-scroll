@@ -5,7 +5,7 @@ Plugin URI: http://www.senff.com/plugins/sticky-anything-wp
 Description: Pick any element on your page, and it will stick when it reaches the top of the page when you scroll down. Usually handy for navigation menus, but can be used for any (unique) element on your page.
 Author: Mark Senff
 Author URI: http://www.senff.com
-Version: 1.1.4
+Version: 1.2
 */
 
 defined('ABSPATH') or die('INSERT COIN');
@@ -15,7 +15,7 @@ defined('ABSPATH') or die('INSERT COIN');
 
 if (!function_exists('sticky_anthing_default_options')) {
 	function sticky_anthing_default_options() {
-		$versionNum = '1.1.4';
+		$versionNum = '1.2';
 		if (get_option('sticky_anything_options') === false) {
 			$new_options['sa_version'] = $versionNum;
 			$new_options['sa_element'] = '';
@@ -23,6 +23,7 @@ if (!function_exists('sticky_anthing_default_options')) {
 			$new_options['sa_minscreenwidth'] = '';			
 			$new_options['sa_maxscreenwidth'] = '';			
 			$new_options['sa_zindex'] = '';
+			$new_options['sa_dynamicmode'] = false;		
 			$new_options['sa_debugmode'] = false;
 			add_option('sticky_anything_options',$new_options);
 		} 
@@ -31,13 +32,18 @@ if (!function_exists('sticky_anthing_default_options')) {
 
 if (!function_exists('sticky_anything_update')) {
 	function sticky_anything_update() {
-		$versionNum = '1.1.4';
+		$versionNum = '1.2';
 		$existing_options = get_option('sticky_anything_options');
 
 		if(!isset($existing_options['sa_minscreenwidth'])) {
 			// Introduced in version 1.1
 			$existing_options['sa_minscreenwidth'] = '';
 			$existing_options['sa_maxscreenwidth'] = '';
+		} 
+
+		if(!isset($existing_options['sa_dynamicmode'])) {
+			// Introduced in version 1.2
+			$existing_options['sa_dynamicmode'] = 'false';
 		} 
 
 		$existing_options['sa_version'] = $versionNum;
@@ -50,12 +56,12 @@ if (!function_exists('load_sticky_anything')) {
     function load_sticky_anything() {
 
 		// Main jQuery plugin file 
-	    wp_register_script('stickyAnythingLib', plugins_url('/assets/js/jq-sticky-anything.min.js', __FILE__), array( 'jquery' ), '1.1');
+	    wp_register_script('stickyAnythingLib', plugins_url('/assets/js/jq-sticky-anything.min.js', __FILE__), array( 'jquery' ), '1.2');
 	    wp_enqueue_script('stickyAnythingLib');
 
 		$options = get_option('sticky_anything_options');
 
-		// Set defaults when empty (because '' does not work with the JQ plugin) 
+		// Set defaults for by-default-empty elements (because '' does not work with the JQ plugin) 
 		if (!$options['sa_topspace']) {
 			$options['sa_topspace'] = '0';
 		}
@@ -78,10 +84,11 @@ if (!function_exists('load_sticky_anything')) {
 		      'minscreenwidth' => $options['sa_minscreenwidth'],
 		      'maxscreenwidth' => $options['sa_maxscreenwidth'],
 		      'zindex' => $options['sa_zindex'],
+		      'dynamicmode' => $options['sa_dynamicmode'],
 		      'debugmode' => $options['sa_debugmode']
 		);
 
-		wp_enqueue_script('stickThis', plugins_url('/assets/js/stickThis.js', __FILE__), array( 'jquery' ), '1.1', true);
+		wp_enqueue_script('stickThis', plugins_url('/assets/js/stickThis.js', __FILE__), array( 'jquery' ), '1.2', true);
 		wp_localize_script( 'stickThis', 'sticky_anything_engage', $script_vars );
 
     }
@@ -234,6 +241,15 @@ if (!function_exists('sticky_anything_config_page')) {
 							</tr>
 
 							<tr>
+								<th scope="row">Dynamic mode: <a href="#" title="When Dynamic Mode is OFF, a cloned element will be created upon page load. If this mode is ON, a cloned element will be created every time your scrolled position hits the 'sticky' point." class="help">?</a></th>
+								<td>
+									<input type="checkbox" id="sa_dynamicmode" name="sa_dynamicmode" <?php if ($sticky_anything_options['sa_dynamicmode']  ) echo ' checked="checked" ';?> />
+									<label for="sa_debugmode"><strong>If the plugin doesn't work in your theme (often the case with responsive themes), try it in Dynamic Mode.</strong></label>
+									<p class="description">NOTE: this is not a 'Magic Checkbox' that fixes all problems. It simply solves <em>some</em> issues that frequently appear with some responsive themes, but doesn't necessarily work in <em>all</em> situations.</p>
+								</td>
+							</tr>
+
+							<tr>
 								<th scope="row">Debug mode: <a href="#" title="When Debug Mode is on, error messages will be shown in your browser's console when the element you selected either doesn't exist, or when there are more elements on the page with your chosen selector." class="help">?</a></th>
 								<td>
 									<input type="checkbox" id="sa_debugmode" name="sa_debugmode" <?php if ($sticky_anything_options['sa_debugmode']  ) echo ' checked="checked" ';?> />
@@ -255,7 +271,7 @@ if (!function_exists('sticky_anything_config_page')) {
 
 		<hr />
 
-		<p><a href="http://www.senff.com/plugins/sticky-anything-wp" target="_blank">Sticky Menu (or Anything!) on Scroll</a> version 1.1.4 by <a href="http://www.senff.com" target="_blank">Senff</a> &nbsp;/&nbsp; <a href="http://www.senff.com/contact" target="_blank">Please Report Bugs</a> &nbsp;/&nbsp; Follow on Twitter: <a href="http://www.twitter.com/senff" target="_blank">@Senff</a> &nbsp;/&nbsp; <a href="http://www.senff.com/plugins/sticky-anything-wp" target="_blank">Detailed documentation</a> &nbsp;/&nbsp; <a href="http://www.senff.com/plugins/sticky-anything" target="_blank">Non-WP jQuery plugin</a></p>
+		<p><a href="http://www.senff.com/plugins/sticky-anything-wp" target="_blank">Sticky Menu (or Anything!) on Scroll</a> version 1.2 by <a href="http://www.senff.com" target="_blank">Senff</a> &nbsp;/&nbsp; <a href="http://www.senff.com/contact" target="_blank">Please Report Bugs</a> &nbsp;/&nbsp; Follow on Twitter: <a href="http://www.twitter.com/senff" target="_blank">@Senff</a> &nbsp;/&nbsp; <a href="http://www.senff.com/plugins/sticky-anything-wp" target="_blank">Detailed documentation</a> &nbsp;/&nbsp; <a href="http://www.senff.com/plugins/sticky-anything" target="_blank">Non-WP jQuery plugin</a></p>
 
 	</div>
 
@@ -307,6 +323,14 @@ if (!function_exists('process_sticky_anything_options')) {
 		foreach ( array('sa_zindex') as $option_name ) {
 			if ( isset( $_POST[$option_name] ) ) {
 				$options[$option_name] = sanitize_text_field( $_POST[$option_name] );
+			}
+		}
+
+		foreach ( array('sa_dynamicmode') as $option_name ) {
+			if ( isset( $_POST[$option_name] ) ) {
+				$options[$option_name] = true;
+			} else {
+				$options[$option_name] = false;
 			}
 		}
 
