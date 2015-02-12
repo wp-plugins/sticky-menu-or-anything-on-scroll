@@ -38,7 +38,7 @@ A little bit of basic HTML/CSS knowledge is required. You just need to know how 
 
 == Frequently Asked Questions ==
 
-= I selected a class/ID in the settings screen, but the element doesn't stick when I scroll downs. Why not? =
+= I selected a class/ID in the settings screen, but the element doesn't stick when I scroll downs. Why not?
 Make sure that if you select the element by its classname, it is preceded by a dot (e.g. ".main-menu"), and if you select it by its ID, that it's preceded by a pound/hash/number sign (e.g. "#main-menu").  Also, make sure there is only ONE element on the page with the selector you're using. If there is none, or more than one element that matches your selector, nothing will happen.
 
 = I'm having some issues on mobile (or other responsive themes).
