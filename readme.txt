@@ -42,7 +42,7 @@ A little bit of basic HTML/CSS knowledge is required. You just need to know how 
 Make sure that if you select the element by its classname, it is preceded by a dot (e.g. ".main-menu"), and if you select it by its ID, that it's preceded by a pound/hash/number sign (e.g. "#main-menu").  Also, make sure there is only ONE element on the page with the selector you're using. If there is none, or more than one element that matches your selector, nothing will happen.
 
 = I'm having some issues on mobile (or other responsive themes). = 
-A number of people reported problems using a sticky element in a responsive theme - mostly situations involving a different menu (in both design and functionality) between desktop, tablet and mobile views. The newly-introduced 'Dynamic Mode' solved these problems. Try it yourself and chances are that works for you as well (though it's not a setting that will magically solves any and all problems that may occur).
+A number of people reported problems using a sticky element in a responsive theme - mostly situations involving a different menu (in both design and functionality) between desktop, tablet and mobile views. The newly-introduced 'Dynamic Mode' solves some of these problems. Try it yourself and chances are that works for you as well (though it's not a setting that will magically solves any and all problems that may occur).
 
 = My menu sticks, but it doesn't open on the Responsive Theme when it's sticky. =
 This is a known bug, and an incompatibility with the theme. I'm looking into it. For the time being, it would be better to turn off stickiness for the mobile menu (set "Do not stick element when screen smaller than:" to 651 pixels).
@@ -53,7 +53,7 @@ Check the "Debug Mode" checkbox in the plugin's settings. Reload the page and yo
 = Is it possible to have multiple sticky elements? =
 The current version only allows one sticky element. Having more than one may clutter up your page and confuse the user (imagine having a menu stuck at the top, and a banner stuck on the left, and another thing on the right, etc.). Having said that, this functionality may be added to a future version.
 
-= What is this Dynamic Mode thing exactly?
+= What is this Dynamic Mode thing exactly? =
 To properly explain this, we'll need to go a little deeper in the plugin's functionality. So bear with me...
 
 When an element becomes sticky at the top of the page (and keeps its place regardless of the scrolling), it's actually not the element itself you see, but a cloned copy of it (the original element is out of view and invisible). 

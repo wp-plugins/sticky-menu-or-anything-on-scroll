@@ -42,7 +42,7 @@ A little bit of basic HTML/CSS knowledge is required. You just need to know how 
 Make sure that if you select the element by its classname, it is preceded by a dot (e.g. ".main-menu"), and if you select it by its ID, that it's preceded by a pound/hash/number sign (e.g. "#main-menu").  Also, make sure there is only ONE element on the page with the selector you're using. If there is none, or more than one element that matches your selector, nothing will happen.
 
 ### I'm having some issues on mobile (or other responsive themes).
-A number of people reported problems using a sticky element in a responsive theme - mostly situations involving a different menu (in both design and functionality) between desktop, tablet and mobile views. The newly-introduced 'Dynamic Mode' solved these problems. Try it yourself and chances are that works for you as well (though it's not a setting that will magically solves any and all problems that may occur).
+A number of people reported problems using a sticky element in a responsive theme - mostly situations involving a different menu (in both design and functionality) between desktop, tablet and mobile views. The newly-introduced 'Dynamic Mode' solves some of these problems. Try it yourself and chances are that works for you as well (though it's not a setting that will magically solves any and all problems that may occur).
 
 ### My menu sticks, but it doesn't open on the Responsive Theme when it's sticky.
 This is a known bug. I'm looking into it.
