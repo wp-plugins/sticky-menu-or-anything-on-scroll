@@ -12,6 +12,7 @@
       minscreenwidth: 0, 
       maxscreenwidth: 99999, 
       zindex: 1, 
+      dynamicmode: false,
       debugmode: false
       }, options );
 
@@ -31,51 +32,64 @@
         console.error('STICKY ANYTHING DEBUG: There is more than one element with the selector/class/ID you selected. You can only make ONE element sticky.');
       }      
     } else {
-      // Create a clone of the menu, right next to original (in the DOM).
-      // OLD: $(this).addClass('original').clone().insertAfter(this).addClass('cloned').css('position','fixed').css('top',settings.top+'px').css('margin-top','0').css('margin-left','0').css('z-index',settings.zindex).removeClass('original').hide();
       $(this).addClass('original');
-      checkElement = setInterval(function(){stickIt(settings.top,settings.minscreenwidth,settings.maxscreenwidth,settings.zindex)},10);
+      if(settings.dynamicmode != true) {
+        // Create a clone of the menu, right next to original (in the DOM) on initial page load
+        createClone(settings.top,settings.zindex);
+      }
+      checkElement = setInterval(function(){stickIt(settings.top,settings.minscreenwidth,settings.maxscreenwidth,settings.zindex,settings.dynamicmode)},10);
     }
 
     return this;
   };
 
 
-function stickIt(stickyTop,minwidth,maxwidth,stickyzindex) {
+  function stickIt(stickyTop,minwidth,maxwidth,stickyZindex,dynamic) {
 
-  var orgElementPos = $('.original').offset();
-  orgElementTop = orgElementPos.top;               
+    var orgElementPos = $('.original').offset();
+    orgElementTop = orgElementPos.top;               
 
-  // Calculating actual viewport width
-  var e = window, a = 'inner';
-  if (!('innerWidth' in window )) {
-    a = 'client';
-    e = document.documentElement || document.body;
-  }
-  viewport = e[ a+'Width' ];
-
-  if (($(window).scrollTop() >= (orgElementTop - stickyTop)) && (viewport >= minwidth) && (viewport <= maxwidth)) {
-
-    // We've scrolled past the original position; now only show the cloned, sticky element.
-
-    // Cloned element should always have same left position and width as original element.     
-    orgElement = $('.original');
-    coordsOrgElement = orgElement.offset();
-    leftOrgElement = coordsOrgElement.left;  
-    widthOrgElement = orgElement.css('width');
-
-    if($('.cloned').length < 1) {
-      // The cloned element does not exist yet, so let's create it on the fly
-      $('.original').clone().insertAfter('.original').addClass('cloned').css('position','fixed').css('top',stickyTop+'px').css('margin-top','0').css('margin-left','0').css('z-index',stickyzindex).removeClass('original').hide();
+    // Calculating actual viewport width
+    var e = window, a = 'inner';
+    if (!('innerWidth' in window )) {
+      a = 'client';
+      e = document.documentElement || document.body;
     }
+    viewport = e[ a+'Width' ];
 
-    $('.cloned').css('left',leftOrgElement+'px').css('top',stickyTop+'px').css('width',widthOrgElement).show();
-    $('.original').css('visibility','hidden');
-  } else {
-    // Not scrolled past the menu; only show the original menu -- remove the cloned element
-    $('.cloned').remove();
-    $('.original').css('visibility','visible');
+    if (($(window).scrollTop() >= (orgElementTop - stickyTop)) && (viewport >= minwidth) && (viewport <= maxwidth)) {
+
+      // scrolled past the original position; now only show the cloned, sticky element.
+
+      // Cloned element should always have same left position and width as original element.     
+      orgElement = $('.original');
+      coordsOrgElement = orgElement.offset();
+      leftOrgElement = coordsOrgElement.left;  
+      widthOrgElement = orgElement.css('width');
+      // If padding is percentages, convert to pixels
+      paddingOrgElement = [orgElement.css('padding-top'), orgElement.css('padding-right'), orgElement.css('padding-bottom'), orgElement.css('padding-left')];
+      paddingCloned = paddingOrgElement[0] + ' ' + paddingOrgElement[1] + ' ' + paddingOrgElement[2] + ' ' + paddingOrgElement[3];
+
+      if( (dynamic == true) && ($('.cloned').length < 1)     ) {
+        // DYNAMIC MODE: if there is no clone present, create it right now
+        createClone(stickyTop,stickyZindex);
+      }
+
+      $('.cloned').css('left',leftOrgElement+'px').css('top',stickyTop+'px').css('width',widthOrgElement).css('padding',paddingCloned).show();
+      $('.original').css('visibility','hidden');
+    } else {
+      // not scrolled past the menu; only show the original menu.
+      if(dynamic == true) {
+        $('.cloned').remove();
+      } else {
+        $('.cloned').hide();
+      }
+      $('.original').css('visibility','visible');
+    }
   }
-}
+
+  function createClone(cloneTop,cloneZindex) {
+    $('.original').clone().insertAfter($('.original')).addClass('cloned').css('position','fixed').css('top',cloneTop+'px').css('margin-top','0').css('margin-left','0').css('z-index',cloneZindex).removeClass('original').hide();
+  }
 
 }(jQuery));
