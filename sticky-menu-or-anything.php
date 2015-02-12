@@ -43,7 +43,7 @@ if (!function_exists('sticky_anything_update')) {
 
 		if(!isset($existing_options['sa_dynamicmode'])) {
 			// Introduced in version 1.2
-			$existing_options['sa_dynamicmode'] = 'false';
+			$existing_options['sa_dynamicmode'] = false;
 		} 
 
 		$existing_options['sa_version'] = $versionNum;
