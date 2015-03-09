@@ -5,7 +5,7 @@
 * Plugin URI: http://www.senff.com/plugins/sticky-anything-wp
 * Requires at least: 3.6
 * Tested up to: 4.1.1
-* Stable tag: 1.2.1
+* Stable tag: 1.2.2
 * License: GPLv2 or later
 * License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -82,7 +82,7 @@ The plugin's own page can be found [here](http://www.senff.com/plugins/sticky-an
 
 ## Changelog
 
-### 1.2.1 
+### 1.2.2 
 * Bug with Dynamic Mode select box/label fixed
 * Bug with Z-index fixed (thanks @aguseo for reporting)
 * All text in plugin fully translatable
