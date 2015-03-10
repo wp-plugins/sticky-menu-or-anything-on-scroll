@@ -5,7 +5,7 @@ Tags: plugin, sticky, menu, scroll, element
 Plugin URI: http://www.senff.com/plugins/sticky-anything-wp
 Requires at least: 3.6
 Tested up to: 4.1.1
-Stable tag: 1.2.3
+Stable tag: 1.2.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -83,6 +83,9 @@ The plugin's own page can be found [here](http://www.senff.com/plugins/sticky-an
 
 == Changelog ==
 
+= 1.2.4 =
+* Fixed small bug related to version number
+
 = 1.2.3 =
 * Bug with Dynamic Mode select box/label fixed
 * Bug with Z-index fixed (thanks @aguseo for reporting)
@@ -115,6 +118,9 @@ The plugin's own page can be found [here](http://www.senff.com/plugins/sticky-an
 
 
 == Upgrade Notice ==
+
+= 1.2.4 =
+* Minor bugfix
 
 = 1.2.3 =
 * Bugfixes, improvements and translation-ready

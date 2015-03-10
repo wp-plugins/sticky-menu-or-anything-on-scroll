@@ -5,7 +5,7 @@ Plugin URI: http://www.senff.com/plugins/sticky-anything-wp
 Description: Pick any element on your page, and it will stick when it reaches the top of the page when you scroll down. Usually handy for navigation menus, but can be used for any (unique) element on your page.
 Author: Mark Senff
 Author URI: http://www.senff.com
-Version: 1.2.3
+Version: 1.2.4
 */
 
 defined('ABSPATH') or die('INSERT COIN');
@@ -20,7 +20,7 @@ defined('ABSPATH') or die('INSERT COIN');
  */
 if (!function_exists('sticky_anthing_default_options')) {
 	function sticky_anthing_default_options() {
-		$versionNum = '1.2.3';
+		$versionNum = '1.2.4';
 		if (get_option('sticky_anything_options') === false) {
 			$new_options['sa_version'] = $versionNum;
 			$new_options['sa_element'] = '';
@@ -38,10 +38,11 @@ if (!function_exists('sticky_anthing_default_options')) {
 /**
  * --- IF DATABASE VALUES EXIST, CHECK IF NEWER OPTIONS EXIST ------------------------------------------
  * --- IF NOT, ADD THESE OPTIONS WITH DEFAULT VALUES ---------------------------------------------------
+ * --- AND UPDATE VERSION NUMBER FOR SURE --------------------------------------------------------------
  */
 if (!function_exists('sticky_anything_update')) {
 	function sticky_anything_update() {
-		$versionNum = '1.2.3';
+		$versionNum = '1.2.4';
 		$existing_options = get_option('sticky_anything_options');
 
 		if(!isset($existing_options['sa_minscreenwidth'])) {
@@ -66,6 +67,9 @@ if (!function_exists('sticky_anything_update')) {
  */
 if (!function_exists('load_sticky_anything')) {
     function load_sticky_anything() {
+
+		$options = get_option('sticky_anything_options');
+		$versionNum = $options['sa_version'];
 
 		// Main jQuery plugin file 
 	    wp_register_script('stickyAnythingLib', plugins_url('/assets/js/jq-sticky-anything.min.js', __FILE__), array( 'jquery' ), $versionNum);
@@ -101,7 +105,7 @@ if (!function_exists('load_sticky_anything')) {
 		      'debugmode' => $options['sa_debugmode']
 		);
 
-		wp_enqueue_script('stickThis', plugins_url('/assets/js/stickThis.js', __FILE__), array( 'jquery' ), '1.2.3', true);
+		wp_enqueue_script('stickThis', plugins_url('/assets/js/stickThis.js', __FILE__), array( 'jquery' ), $versionNum, true);
 		wp_localize_script( 'stickThis', 'sticky_anything_engage', $script_vars );
 
     }
