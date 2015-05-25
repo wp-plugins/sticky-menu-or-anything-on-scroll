@@ -1,5 +1,5 @@
 /**
-* @preserve Sticky Anything 1.2.4 | @senff | GPL2 Licensed
+* @preserve Sticky Anything 1.3 | @senff | GPL2 Licensed
 */
 
 (function($) {
@@ -11,9 +11,10 @@
 			maxscreenwidth:sticky_anything_engage.maxscreenwidth,
 			zindex:sticky_anything_engage.zindex,
 			dynamicmode:sticky_anything_engage.dynamicmode,
-			debugmode:sticky_anything_engage.debugmode
+			debugmode:sticky_anything_engage.debugmode,
+			pushup:sticky_anything_engage.pushup,
+			adminbar:sticky_anything_engage.adminbar
 		});
 
 	});
 }(jQuery));
-

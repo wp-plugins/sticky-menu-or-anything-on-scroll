@@ -5,7 +5,7 @@ Plugin URI: http://www.senff.com/plugins/sticky-anything-wp
 Description: Pick any element on your page, and it will stick when it reaches the top of the page when you scroll down. Usually handy for navigation menus, but can be used for any (unique) element on your page.
 Author: Mark Senff
 Author URI: http://www.senff.com
-Version: 1.2.4
+Version: 1.3
 */
 
 defined('ABSPATH') or die('INSERT COIN');
@@ -20,16 +20,18 @@ defined('ABSPATH') or die('INSERT COIN');
  */
 if (!function_exists('sticky_anthing_default_options')) {
 	function sticky_anthing_default_options() {
-		$versionNum = '1.2.4';
+		$versionNum = '1.3';
 		if (get_option('sticky_anything_options') === false) {
 			$new_options['sa_version'] = $versionNum;
 			$new_options['sa_element'] = '';
 			$new_options['sa_topspace'] = '';
+			$new_options['sa_adminbar'] = true;
 			$new_options['sa_minscreenwidth'] = '';			
 			$new_options['sa_maxscreenwidth'] = '';			
 			$new_options['sa_zindex'] = '';
 			$new_options['sa_dynamicmode'] = false;		
 			$new_options['sa_debugmode'] = false;
+			$new_options['sa_pushup'] = '';
 			add_option('sticky_anything_options',$new_options);
 		} 
 	}
@@ -42,7 +44,7 @@ if (!function_exists('sticky_anthing_default_options')) {
  */
 if (!function_exists('sticky_anything_update')) {
 	function sticky_anything_update() {
-		$versionNum = '1.2.4';
+		$versionNum = '1.3';
 		$existing_options = get_option('sticky_anything_options');
 
 		if(!isset($existing_options['sa_minscreenwidth'])) {
@@ -54,6 +56,12 @@ if (!function_exists('sticky_anything_update')) {
 		if(!isset($existing_options['sa_dynamicmode'])) {
 			// Introduced in version 1.2
 			$existing_options['sa_dynamicmode'] = false;
+		} 
+
+		if(!isset($existing_options['sa_pushup'])) {
+			// Introduced in version 1.3
+			$existing_options['sa_pushup'] = '';
+			$existing_options['sa_adminbar'] = true;
 		} 
 
 		$existing_options['sa_version'] = $versionNum;
@@ -72,8 +80,8 @@ if (!function_exists('load_sticky_anything')) {
 		$versionNum = $options['sa_version'];
 
 		// Main jQuery plugin file 
-	    wp_register_script('stickyAnythingLib', plugins_url('/assets/js/jq-sticky-anything.min.js', __FILE__), array( 'jquery' ), $versionNum);
-	    wp_enqueue_script('stickyAnythingLib');
+	    	wp_register_script('stickyAnythingLib', plugins_url('/assets/js/jq-sticky-anything.min.js', __FILE__), array( 'jquery' ), $versionNum);
+	    	wp_enqueue_script('stickyAnythingLib');
 
 		$options = get_option('sticky_anything_options');
 
@@ -102,7 +110,9 @@ if (!function_exists('load_sticky_anything')) {
 		      'maxscreenwidth' => $options['sa_maxscreenwidth'],
 		      'zindex' => $options['sa_zindex'],
 		      'dynamicmode' => $options['sa_dynamicmode'],
-		      'debugmode' => $options['sa_debugmode']
+		      'debugmode' => $options['sa_debugmode'],
+		      'pushup' => $options['sa_pushup'],
+		      'adminbar' => $options['sa_adminbar']
 		);
 
 		wp_enqueue_script('stickThis', plugins_url('/assets/js/stickThis.js', __FILE__), array( 'jquery' ), $versionNum, true);
@@ -251,7 +261,7 @@ if (!function_exists('sticky_anything_config_page')) {
 										if ($sticky_anything_options['sa_element'] != '#NO-ELEMENT') {
 											echo esc_html( $sticky_anything_options['sa_element'] ); 
 										}
-									?>"/> <?php _e('(e.g. #main-navigation, .main-menu-1, header nav, etc.)','Sticky Anything plugin'); ?>
+									?>"/> <em><?php _e('(choose ONE element, e.g. #main-navigation, OR .main-menu-1, OR header nav, etc.)','Sticky Anything plugin'); ?></em>
 								</td>
 							</tr>
 
@@ -260,6 +270,14 @@ if (!function_exists('sticky_anything_config_page')) {
 								<th scope="row"><?php _e('Space between top of page and sticky element: (optional)','Sticky Anything plugin'); ?> <a href="#" title="<?php _e('If you don\'t want the element to be sticky at the very top of the page, but a little lower, add the number of pixels that should be between your element and the \'ceiling\' of the page.','Sticky Anything plugin'); ?>" class="help">?</a></th>
 								<td>
 									<input type="number" id="sa_topspace" name="sa_topspace" value="<?php echo esc_html( $sticky_anything_options['sa_topspace'] ); ?>" style="width:80px;" /> pixels
+								</td>
+							</tr>
+
+							<tr class="new-feature">
+								<th scope="row"><span class="new"><?php _e('NEW!','Sticky Anything plugin'); ?></span> <?php _e('Check for Admin Toolbar:','Sticky Anything plugin'); ?> <a href="#" title="<?php _e('If the sticky element gets obscured by the Administrator Toolbar for logged in users (or vice versa), check this box.','Sticky Anything plugin'); ?>" class="help">?</a></th>
+								<td>
+									<input type="checkbox" id="sa_adminbar" name="sa_adminbar" <?php if ($sticky_anything_options['sa_adminbar']  ) echo ' checked="checked" ';?> />
+									<label for="sa_adminbar"><strong><?php _e('Move the sticky element down a little if there is an Administrator Toolbar at the top (for logged in users).','Sticky Anything plugin'); ?></strong></label>
 								</td>
 							</tr>
 
@@ -281,6 +299,17 @@ if (!function_exists('sticky_anything_config_page')) {
 								<th scope="row"><?php _e('Z-index: (optional)','Sticky Anything plugin'); ?> <a href="#" title="<?php _e('If there are other elements on the page that obscure/overlap the sticky element, adding a Z-index might help. If you have no idea what that means, try entering 99999.','Sticky Anything plugin'); ?>" class="help">?</a></th>
 								<td>
 									<input type="number" id="sa_zindex" name="sa_zindex" value="<?php echo esc_html( $sticky_anything_options['sa_zindex'] ); ?>" style="width:80px;" />
+								</td>
+							</tr>
+
+							<tr class="new-feature">
+								<th scope="row"><span class="new"><?php _e('NEW!','Sticky Anything plugin'); ?></span> <?php _e('Push-up element (optional):','Sticky Anything plugin'); ?> <a href="#" title="<?php _e('If you want your sticky element to be \'pushed up\' again by another element lower on the page, enter it here. Make sure this is a unique identifier.','Sticky Anything plugin'); ?>" class="help">?</a></th>
+								<td>
+									<input type="text" id="sa_pushup" name="sa_pushup" value="<?php 
+										if ($sticky_anything_options['sa_pushup'] != '#NO-ELEMENT') {
+											echo esc_html( $sticky_anything_options['sa_pushup'] ); 
+										}
+									?>"/> <em><?php _e('(choose ONE element, e.g. #footer, OR .widget-bottom, etc.)','Sticky Anything plugin'); ?></em>
 								</td>
 							</tr>
 
@@ -313,36 +342,7 @@ if (!function_exists('sticky_anything_config_page')) {
 				</div>
 
 				<div id="sticky-faq">
-					<h2><?php _e('FAQ','Sticky Anything plugin'); ?>/<?php _e('Troubleshooting','Sticky Anything plugin'); ?></h2>
-
-					<p><strong><?php _e('Q: I selected a class/ID in the settings screen, but the element doesn\'t stick when I scroll down. Why not?','Sticky Anything plugin'); ?></strong>
-					<?php _e('Make sure that if you select the element by its classname, it is preceded by a dot (e.g. ".main-menu"), and if you select it by its ID, that it\'s preceded by a pound/hash/number sign (e.g. "#main-menu").  Also, make sure there is only ONE element on the page with the selector you\'re using. If there is none, or more than one element that matches your selector, nothing will happen.','Sticky Anything plugin'); ?></p>
-
-					<p><strong><?php _e('Q: I\'m having some issues on mobile (or other responsive themes).','Sticky Anything plugin'); ?></strong>
-					<?php _e('A number of people reported problems using a sticky element in a responsive theme - mostly situations involving a different menu (in both design and functionality) between desktop, tablet and mobile views. The newly-introduced \'Dynamic Mode\' solves some of these problems. Try it yourself and chances are that works for you as well (though it\'s not a setting that will magically solves any and all problems that may occur).','Sticky Anything plugin'); ?></p>
-
-					<p><strong><?php _e('Q: My menu sticks, but it doesn\'t open on the <a href="https://wordpress.org/themes/responsive" target="_blank">Responsive</a> theme when it\'s sticky.','Sticky Anything plugin'); ?></strong>
-					<?php _e('This is a known bug. I\'m looking into it.','Sticky Anything plugin'); ?></p>
-
-					<p><strong><?php _e('Q: Still doesn\'t work. What could be wrong?','Sticky Anything plugin'); ?></strong>
-					<?php _e('Check the "Debug Mode" checkbox in the plugin\'s settings. Reload the page and you may see errors in your browser\'s console window. If you\'ve used a selector that returns zero elements on the page, OR more than one, it will be shown.','Sticky Anything plugin'); ?></p>
-
-					<p><strong><?php _e('Q: Is it possible to have multiple sticky elements?','Sticky Anything plugin'); ?></strong>
-					<?php _e('The current version only allows one sticky element. Having more than one may clutter up your page and confuse the user (imagine having a menu stuck at the top, and a banner stuck on the left, and another thing on the right, etc.). Having said that, this functionality may be added to a future version.','Sticky Anything plugin'); ?></p>
-
-					<p><strong><?php _e('Q: What is this Dynamic Mode thing exactly?','Sticky Anything plugin'); ?></strong>
-					<?php _e('To properly explain this, we\'ll need to go a little deeper in the plugin\'s functionality. So bear with me...','Sticky Anything plugin'); ?></p>
-					<p><?php _e('When an element becomes sticky at the top of the page (and keeps its place regardless of the scrolling), it\'s actually not the element itself you see, but a cloned copy of it (the original element is out of view and invisible).','Sticky Anything plugin'); ?></p>
-					<p><?php _e('The original element always stays where it originally is on the page, while the cloned element is always at the top of the browser viewport screen. However, you will never see them both at the same time; depending on your scroll position, it always just shows either one or the other.','Sticky Anything plugin'); ?></p>
-					<p><?php _e('In the original plugin version, the clone would be created right when you load the page. Then when you would scroll down, it would become visible (and stick at the top) while the original element would disappear.','Sticky Anything plugin'); ?></p>
-					<p><?php _e('However, some themes use some JavaScript to dynamically create elements (menus, mostly) for mobile sites. With this method, a menu doesn\'t exist in the HTML source code when you load the page, but is created on the fly some time after the page is fully loaded -- in many cases, these menus would just be generated ONLY when the screen is more (or less) than a certain specific width. With the original version of the plugin, the problem would be that the original element may not have been fully created upon page load, so the clone would also not be fully functional.','Sticky Anything plugin'); ?></p>
-					<p><?php _e('In Dynamic Mode, a clone of the element is not created on page load -- instead, it\'s created when the user scrolls and hits the "sticky" point. This ensures that the cloned element is an actual 1-on-1 copy of what the original element consists of at that specific point (and not at the "page is loaded" point, which may be different if the element was altered since).','Sticky Anything plugin'); ?></p>
-					<p><?php _e('Why don\'t we use Dynamic Mode all the time then? This has to do with the fact that other plugins initialize themselves on page load and may need the full markup (including the cloned element) at that point. In Dynamic Mode, there is no clone available yet on page load, so that could cause an issue.','Sticky Anything plugin'); ?></p>
-					<p><?php _e('Phew!','Sticky Anything plugin'); ?></p>
-
-					<p><strong><?php _e('Q: I\'ll need more help please!','Sticky Anything plugin'); ?></strong>
-					<?php _e('The plugin\'s own page can be found at <a href="http://www.senff.com/plugins/sticky-anything-wp" target="_blank">http://www.senff.com/plugins/sticky-anything-wp</a>. If that still doesn\'t help you solve your issue, please do NOT file a bug through the form on my website, but instead go to the plugin\'s support forum on <a href="https://wordpress.org/support/plugin/sticky-menu-or-anything-on-scroll" target="_blank">WordPress.org</a>.','Sticky Anything plugin'); ?></p>
-
+					<?php include 'assets/faq.php'; ?>
 				</div>
 
 			</div>
@@ -405,6 +405,20 @@ if (!function_exists('process_sticky_anything_options')) {
 		foreach ( array('sa_zindex') as $option_name ) {
 			if ( isset( $_POST[$option_name] ) ) {
 				$options[$option_name] = sanitize_text_field( $_POST[$option_name] );
+			}
+		}
+
+		foreach ( array('sa_pushup') as $option_name ) {
+			if ( isset( $_POST[$option_name] ) ) {
+				$options[$option_name] = sanitize_text_field( $_POST[$option_name] );
+			} 
+		}
+
+		foreach ( array('sa_adminbar') as $option_name ) {
+			if ( isset( $_POST[$option_name] ) ) {
+				$options[$option_name] = true;
+			} else {
+				$options[$option_name] = false;
 			}
 		}
 
