@@ -5,7 +5,7 @@ Tags: plugin, sticky, menu, scroll, element
 Plugin URI: http://www.senff.com/plugins/sticky-anything-wp
 Requires at least: 3.6
 Tested up to: 4.2.2
-Stable tag: 1.3
+Stable tag: 1.3.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -96,6 +96,9 @@ The plugin's own page can be found [here](http://www.senff.com/plugins/sticky-an
 
 == Changelog ==
 
+= 1.3.1 =
+* Minor bug fix for push-up element
+
 = 1.3 =
 * Added functionality to move sticky element down in case there is an Administrator Toolbar at the top of the page
 * Added functionality to push sticky element up by another element lower down the page
@@ -135,6 +138,9 @@ The plugin's own page can be found [here](http://www.senff.com/plugins/sticky-an
 
 
 == Upgrade Notice ==
+
+= 1.3.1 =
+* Minor bug fix for push-up element
 
 = 1.3 =
 * BY POPULAR DEMAND: functionalities added related to Administrator Toolbar and element that can push sticky element up

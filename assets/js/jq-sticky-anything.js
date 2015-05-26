@@ -1,5 +1,5 @@
 /**
-* @preserve Sticky Anything 1.3 | @senff | GPL2 Licensed
+* @preserve Sticky Anything 1.3.1 | @senff | GPL2 Licensed
 */
 
 (function ($) {
@@ -103,7 +103,7 @@
       leftOrgElement = coordsOrgElement.left;  
       widthOrgElement = orgElement.css('width');
       heightOrgElement = orgElement.outerHeight();
-      
+
       // If padding is percentages, convert to pixels
       paddingOrgElement = [orgElement.css('padding-top'), orgElement.css('padding-right'), orgElement.css('padding-bottom'), orgElement.css('padding-left')];
       paddingCloned = paddingOrgElement[0] + ' ' + paddingOrgElement[1] + ' ' + paddingOrgElement[2] + ' ' + paddingOrgElement[3];
@@ -113,8 +113,16 @@
         createClone(stickyTop,stickyZindex);
       }
 
-      if (pushup && ($(window).scrollTop() > (pushElementTop-heightOrgElement-adminBarHeight))) {
-        stickyTopMargin = (pushElementTop-heightOrgElement-$(window).scrollTop());
+      // Fixes bug where height of original element returns zero
+      elementHeight = 0;
+      if (heightOrgElement < 1) {
+        elementHeight = $('.cloned').outerHeight();
+      } else {
+        elementHeight = $('.original').outerHeight();
+      }
+
+      if (pushup && ($(window).scrollTop() > (pushElementTop-elementHeight-adminBarHeight))) {
+        stickyTopMargin = (pushElementTop-elementHeight-$(window).scrollTop());
       } else {
         stickyTopMargin = adminBarHeight;
       }
