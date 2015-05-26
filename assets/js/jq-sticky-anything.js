@@ -121,8 +121,10 @@
         elementHeight = $('.original').outerHeight();
       }
 
-      if (pushup && ($(window).scrollTop() > (pushElementTop-elementHeight-adminBarHeight))) {
-        stickyTopMargin = (pushElementTop-elementHeight-$(window).scrollTop());
+      // If scrolled position = pushup-element (top coordinate) - space between top and element - element height - admin bar
+      // In other words, if the pushup element hits the bottom of the sticky element
+      if (pushup && ($(window).scrollTop() > (pushElementTop-stickyTop-elementHeight-adminBarHeight))) {
+        stickyTopMargin = (pushElementTop-stickyTop-elementHeight-$(window).scrollTop());
       } else {
         stickyTopMargin = adminBarHeight;
       }
